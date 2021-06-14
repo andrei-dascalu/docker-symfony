@@ -6,8 +6,7 @@ services:
     build:
       context: ./docker
     volumes:
-    - ./:/var/www/html:consistent
-    - ./docker/sym.conf:/etc/apache2/sites-enabled/000-default.conf
+    - ./:/app:consistent
     - ./docker/extra.ini:/usr/local/etc/php/conf.d/01.extra.ini
     depends_on:
     - pma
@@ -20,18 +19,18 @@ services:
     - MYSQL_USER=symfony
     - MYSQL_PASSWORD=123456root
     ports:
-    - 3333:3306
+    - 3306:3306
     volumes:
     - "symdb:/var/lib/mysql"
 
   pma:
     image: phpmyadmin/phpmyadmin:5.1
     depends_on:
-      - mysql
+    - mysql
     ports:
     - 8181:80
     environment:
-    - PMA_HOST=emsdb
+    - PMA_HOST=mysql
     - PMA_PASSWORD=123456root
     - MYSQL_DATABASE=symfony
     - PMA_USER=root

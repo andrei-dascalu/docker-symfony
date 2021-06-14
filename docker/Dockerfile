@@ -1,6 +1,8 @@
-FROM php:8-apache
+FROM php:8-cli
 
-WORKDIR /var/www/html
+WORKDIR /app
+
+COPY ./setup.sh /usr/local/bin/entrypoints
 
 RUN apt-get update && \
     apt-get install -y \
@@ -20,8 +22,9 @@ RUN apt-get update && \
         ca-certificates \
         libfreetype6-dev \
         fonts-open-sans \
-        git && \
-    curl -sS https://get.symfony.com/cli/installer | bash && \
+        git \
+    && chmod +x /usr/local/bin/entrypoints \
+    && curl -sS https://get.symfony.com/cli/installer | bash && \
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
     php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
@@ -57,7 +60,8 @@ RUN apt-get update && \
         redis \
         exif \
         curl \
-        sodium \
-    && rm -rf /etc/apache2/sites-enabled/*.conf
+        sodium
 
 EXPOSE 80
+
+ENTRYPOINT ["/bin/bash", "-c", "/usr/local/bin/entrypoints"]
