@@ -58,6 +58,6 @@ RUN apt-get update && \
         exif \
         curl \
         sodium \
-    && rm -rf /etc/apache2/sites-enabled/000-default.conf
+    && rm -rf /etc/apache2/sites-enabled/*.conf
 
 EXPOSE 80
