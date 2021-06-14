@@ -5,6 +5,8 @@ services:
     - 8080:80
     build:
       context: ./docker
+    environment:
+    - SYMFONY_FOLDER=symproject
     volumes:
     - ./:/app:consistent
     - ./docker/extra.ini:/usr/local/etc/php/conf.d/01.extra.ini
