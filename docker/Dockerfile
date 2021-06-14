@@ -52,12 +52,13 @@ RUN apt-get update && \
         iconv \
         zip \
         opcache \
+        bcmath \
         igbinary \
         redis \
         exif \
         curl \
         sodium \
-        ast
+    && /etc/apache2/sites-enabled/000-default.conf
 
 COPY ./sym.conf /etc/apache2/sites-available/sym.conf
 COPY ./extra.ini /usr/local/etc/php/conf.d/01.extra.ini
