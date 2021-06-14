@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  symfony:
+    ports:
+    - 8080:80
+    build:
+      context: ./docker
+    volumes:
+    - ./:/var/www/html:consistent
+    depends_on:
+    - pma
+
+  mysql:
+    image: mysql:8
+    environment:
+    - MYSQL_ROOT_PASSWORD=123456root
+    - MYSQL_DATABASE=symfony
+    - MYSQL_USER=symfony
+    - MYSQL_PASSWORD=123456root
+    ports:
+    - 3333:3306
+    volumes:
+    - "symdb:/var/lib/mysql"
+
+  pma:
+    image: phpmyadmin/phpmyadmin:5.1
+    depends_on:
+      - mysql
+    ports:
+    - 8181:80
+    environment:
+    - PMA_HOST=emsdb
+    - PMA_PASSWORD=123456root
+    - MYSQL_DATABASE=symfony
+    - PMA_USER=root
+    - UPLOAD_LIMIT=128M
+    - MAX_EXECUTION_TIME=3600
+    - MEMORY_LIMIT=1024M
+
+  emsmail:
+    restart: unless-stopped
+    image: mailhog/mailhog:v1.0.1
+    ports:
+    - 8282:8025
+    environment:
+    - VIRTUAL_HOST=localhost
+    - VIRTUAL_PORT=8025
+
+volumes:
+  symdb:
+    external: false
