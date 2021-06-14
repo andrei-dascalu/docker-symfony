@@ -7,6 +7,8 @@ services:
       context: ./docker
     volumes:
     - ./:/var/www/html:consistent
+    - ./docker/sym.conf:/etc/apache2/sites-enabled/000-default.conf
+    - ./docker/extra.ini:/usr/local/etc/php/conf.d/01.extra.ini
     depends_on:
     - pma
 
